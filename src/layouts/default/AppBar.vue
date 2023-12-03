@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-navigation-drawer theme="dark" dark v-model="drawer" temporary>
+    <!-- <v-navigation-drawer theme="dark" dark v-model="drawer" temporary>
       <template v-slot:prepend>
         <v-list-item one-line>
           <v-list-item-content :style="{ 'align-items': 'center' }">
@@ -28,13 +28,9 @@
           <v-btn block class="button" @click="logout"> Logout </v-btn>
         </div>
       </template>
-    </v-navigation-drawer>
+    </v-navigation-drawer> -->
 
-    <v-app-bar
-      color="teal-darken-4"
-      image="https://picsum.photos/1920/1080?random"
-      prominent
-    >
+    <!-- <v-app-bar color="#ad7c53" prominent>
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
       <v-toolbar-title color="black">Share your thoughts</v-toolbar-title>
@@ -44,29 +40,50 @@
       <v-btn icon @click="goToCreateEventPage()">
         <v-icon>mdi-plus</v-icon>
       </v-btn>
-    </v-app-bar>
+    </v-app-bar> -->
+
+    <div class="header">
+      <div class="app-name">SHARE YOUR POSTS</div>
+      <div class="company"> GOODGOOD TRAIN SL</div>
+    </div>
 
     <v-main theme="dark">
-      <v-container fluid>
-        <v-row dense class="custom-card">
-          <v-col v-for="n in 10" :key="n" cols="12">
-            <v-card
-              :title="`Content ${n}`"
-              :subtitle="`Subtitle for Content ${n}`"
-              text="Lorem ipsum dolor sit amet consectetur, adipisicing elit.?"
-            ></v-card>
-          </v-col>
-        </v-row>
-      </v-container>
+      <div class="main">
+        <v-container fluid>
+          <v-row dense class="custom-card">
+            <v-col v-for="post in posts" :key="post.id" cols="12">
+              <v-card
+                :title="post.title"
+                :subtitle="post.author"
+                :text="post.description"
+              ></v-card>
+            </v-col>
+          </v-row>
+
+          <v-row justify="center">
+            <v-col cols="12" class="new-post">
+              <v-btn @click="fetchPosts">Create New Post</v-btn>
+            </v-col>
+          </v-row>
+
+        </v-container>
+      </div>
     </v-main>
   </div>
 </template>
 
 <script>
 export default {
+  computed: {
+    items() {
+      return this.$store.state.items;
+    },
+    posts() {
+      return this.$store.state.posts;
+    },
+  },
   data: () => ({
     drawer: false,
-    items: [{ title: "Posts", icon: "mdi-domain", color: "red", to: "/" }],
   }),
   methods: {
     goToCreateEventPage: function () {
@@ -77,9 +94,9 @@ export default {
       localStorage.clear();
       this.$router.push("/");
     },
-    toggleTheme() {
-      const theme = useTheme();
-      theme.dark = !theme.dark;
+
+    fetchPosts() {
+      this.$store.dispatch("fetchPosts");
     },
   },
 
@@ -92,10 +109,42 @@ export default {
 </script>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Alegreya+Sans&family=Raleway&display=swap");
-
+@import url("https://fonts.googleapis.com/css2?family=Kalam&family=Yanone+Kaffeesatz&display=swap");
 .main {
-  font-family: "Raleway", sans-serif;
+  background-color: #393d46;
+  height: 100%;
+  font-family: "Kalam", cursive;
+  font-family: "Yanone Kaffeesatz", sans-serif;
+}
+
+.header {
+  height: 6vh;
+  background-color: #333; /* Change the background color as needed */
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px; /* Adjust the padding as needed */
+}
+
+.app-name {
+  font-family: "Kalam", cursive;
+  font-family: "Yanone Kaffeesatz", sans-serif;
+  margin: 0 auto;
+  font-size: x-large;
+}
+
+.company {
+  font-family: "Kalam";
+  font-family: "Yanone Kaffeesatz", sans-serif;
+  font-size: medium;
+
+}
+.new-post {
+  position: fixed;
+  bottom: 20px;
+  display: flex;
+  justify-content: center;
 }
 
 .button {
