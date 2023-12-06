@@ -3,28 +3,25 @@ import { createStore } from "vuex";
 
 export default createStore({
   state: {
-    items: [{ title: "Posts", icon: "mdi-domain", color: "red", to: "/" }],
-    posts: [
-      {
-        title: "Posts 1",
-        author: "This is a subtitle",
-        description: "This is a description",
-      },
-    ],
+    posts: [],
   },
   mutations: {
     updatePosts(state, newPosts) {
+      console.log("update posts", state, newPosts);
       state.posts = newPosts;
     },
   },
   actions: {
     async fetchPosts({ commit }) {
-      // Simulate an API call to fetch posts
       const posts = await fetchPosts();
-      commit("updatePosts", posts);
+      if (posts.length > 0) {
+        commit("updatePosts", posts);
+      }
     },
   },
   getters: {
-    // Your getters go here
+    posts(state) {
+      return state.posts;
+    },
   },
 });
