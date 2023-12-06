@@ -1,50 +1,8 @@
 <template>
   <div>
-    <!-- <v-navigation-drawer theme="dark" dark v-model="drawer" temporary>
-      <template v-slot:prepend>
-        <v-list-item one-line>
-          <v-list-item-content :style="{ 'align-items': 'center' }">
-            <v-list-item-title> ShareYourThoughts </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </template>
-
-      <v-divider></v-divider>
-
-      <v-list>
-        <v-list-item v-for="item in items" :key="item.title" :to="item.to" link>
-          <v-list-item-icon>
-            <v-icon :color="item.color">{{ item.icon }} </v-icon>
-          </v-list-item-icon>
-
-          <v-list-item-content>
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-
-      <template v-slot:append>
-        <div class="pa-2">
-          <v-btn block class="button" @click="logout"> Logout </v-btn>
-        </div>
-      </template>
-    </v-navigation-drawer> -->
-
-    <!-- <v-app-bar color="#ad7c53" prominent>
-      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-
-      <v-toolbar-title color="black">Share your thoughts</v-toolbar-title>
-
-      <v-spacer></v-spacer>
-
-      <v-btn icon @click="goToCreateEventPage()">
-        <v-icon>mdi-plus</v-icon>
-      </v-btn>
-    </v-app-bar> -->
-
     <div class="header">
       <div class="app-name">SHARE YOUR POSTS</div>
-      <div class="company"> GOODGOOD TRAIN SL</div>
+      <div class="company">GOODGOOD TRAIN SL</div>
     </div>
 
     <v-main theme="dark">
@@ -65,7 +23,6 @@
               <v-btn @click="fetchPosts">Create New Post</v-btn>
             </v-col>
           </v-row>
-
         </v-container>
       </div>
     </v-main>
@@ -73,43 +30,48 @@
 </template>
 
 <script>
+import { useRouter } from "vue-router";
+import { useStore } from "vuex";
+import { ref, onMounted, computed } from "vue";
+
 export default {
-  computed: {
-    items() {
-      return this.$store.state.items;
-    },
-    posts() {
-      return this.$store.state.posts;
-    },
-  },
-  data: () => ({
-    drawer: false,
-  }),
-  methods: {
-    goToCreateEventPage: function () {
-      this.$router.push("/");
-    },
+  setup() {
+  // Declare reactive variables
+  const drawer = ref(false);
+  const posts = computed(() => store.getters.posts);
+  const router = useRouter();
+  const store = useStore();
 
-    logout() {
-      localStorage.clear();
-      this.$router.push("/");
-    },
+  // Declare functions
+  const logout = () => {
+    localStorage.clear();
+    router.push("/");
+  };
 
-    fetchPosts() {
-      this.$store.dispatch("fetchPosts");
-    },
-  },
+  const fetchPosts = async () => {
+    await store.dispatch("fetchPosts");
+  };
 
-  watch: {
-    group() {
-      this.drawer = false;
-    },
-  },
+  // Lifecycle hook
+  onMounted(async () => {
+    await fetchPosts();
+  });
+
+  // Return reactive variables and functions
+  return {
+    drawer,
+    posts,
+    logout,
+    fetchPosts,
+  };
+}
+
 };
 </script>
 
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Kalam&family=Yanone+Kaffeesatz&display=swap");
+
 .main {
   background-color: #393d46;
   height: 100%;
@@ -119,12 +81,14 @@ export default {
 
 .header {
   height: 6vh;
-  background-color: #333; /* Change the background color as needed */
+  background-color: #333;
+  /* Change the background color as needed */
   color: white;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 20px; /* Adjust the padding as needed */
+  padding: 0 20px;
+  /* Adjust the padding as needed */
 }
 
 .app-name {
@@ -138,8 +102,8 @@ export default {
   font-family: "Kalam";
   font-family: "Yanone Kaffeesatz", sans-serif;
   font-size: medium;
-
 }
+
 .new-post {
   position: fixed;
   bottom: 20px;
