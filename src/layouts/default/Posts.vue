@@ -146,8 +146,6 @@ export default {
       currentStep,
       steps,
       currentOptions,
-      isNextButtonDisabled,
-      isSaveButtonDisabled,
       selectOption,
       nextStep,
       prevStep,
