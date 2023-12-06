@@ -1,5 +1,5 @@
 <template>
-  <v-app id="inspire" theme="dark">
+  <v-app id="inspire">
     <router-view></router-view>
   </v-app>
 </template>
@@ -7,3 +7,4 @@
 <script setup>
 
 </script>
+
